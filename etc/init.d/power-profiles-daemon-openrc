@@ -14,7 +14,8 @@ start() {
     ebegin "Starting Power Profiles Daemon"
 
     checkpath --directory --owner root:root --mode 0755 /var/lib/power-profiles-daemon
-    checkpath --file --owner root:root --mode 0644 /run/power-profiles-daemon.pid
+    checkpath --directory --owner root:root --mode 0755 /run
+    checkpath --file --owner root:root --mode 0644 "${pidfile}"
 
     start-stop-daemon --start --exec "${command}" --make-pidfile --pidfile "${pidfile}" --background
     eend $?
@@ -22,13 +23,14 @@ start() {
 
 stop() {
     ebegin "Stopping Power Profiles Daemon"
-    start-stop-daemon --stop --exec "${command}" --pidfile "${pidfile}"
+    start-stop-daemon --stop --pidfile "${pidfile}"
     eend $?
 }
 
 restart() {
     ebegin "Restarting Power Profiles Daemon"
     stop
+    sleep 1
     start
     eend $?
 }
