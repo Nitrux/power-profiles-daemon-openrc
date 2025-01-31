@@ -7,9 +7,7 @@ pidfile="/run/power-profiles-daemon.pid"
 
 depend() {
     need dbus
-    after multi-user display-manager
-    provide power-management
-    conflict tuned tlp auto-cpufreq system76-power
+    after sddm
 }
 
 start() {
