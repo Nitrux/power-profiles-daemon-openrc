@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+# Copyright (c) 2007-2021 The Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+description="Manages power profiles for modern desktops"
+command="/usr/libexec/power-profiles-daemon"
+pidfile="/run/power-profiles-daemon.pid"
+
+# This tells OpenRC to start the daemon in the background
+# and that OpenRC should create the PID file for it.
+command_background="yes"
+
+depend() {
+	# This daemon provides a D-Bus service.
+	need dbus
+	# It's a desktop service, so it should start after the display manager.
+	after qtgreet
+}
+
+start_pre() {
+	# Ensure the state directory exists before the daemon starts.
+	checkpath --directory --owner root:root --mode 0755 /var/lib/power-profiles-daemon
+}
